@@ -23,7 +23,7 @@ public class Program
         var app = builder.Build();
 
         app.AddRestApi();
-        app.AddOpenApi(builder.Configuration);
+        app.AddOpenApi();
         app.AddAuthentication();
 
         app.Run();

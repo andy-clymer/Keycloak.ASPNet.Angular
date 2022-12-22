@@ -43,18 +43,17 @@ internal static class OpenApiStartup
     /// Add OpenAPI spec generation middleware and UI.
     /// </summary>
     /// <param name="app">The app to act on.</param>
-    /// <param name="configuration">The application configuration.</param>
-    public static void AddOpenApi(this WebApplication app, IConfiguration configuration)
+    public static void AddOpenApi(this WebApplication app)
     {
         app.AddSwaggerMiddleware();
-        app.AddSwaggerUi(configuration);
+        app.AddSwaggerUi();
         app.AddOpenApiUiRedirects();
     }
 
     private static void AddSwaggerMiddleware(this IApplicationBuilder app)
         => app.UseSwagger(c => c.RouteTemplate = $"{StaticRoutes.API_PREFIX}/{{documentName}}/{StaticRoutes.OPEN_API_SPEC}");
 
-    private static void AddSwaggerUi(this IApplicationBuilder app, IConfiguration configuration)
+    private static void AddSwaggerUi(this IApplicationBuilder app)
     {
         app.UseSwaggerUI(config =>
         {
@@ -65,7 +64,7 @@ internal static class OpenApiStartup
             config.EnableTryItOutByDefault();
             config.ConfigObject.AdditionalItems.Add("requestSnippetsEnabled", true);
 
-            config.AddAuthorization(configuration);
+            config.AddAuthorization(app);
         });
     }
 
